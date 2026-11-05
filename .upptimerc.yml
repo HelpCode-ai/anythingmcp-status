@@ -1,31 +1,48 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Upptime configuration for the AnythingMCP status page.
+# Docs: https://upptime.js.org/docs/configuration
+owner: HelpCode-ai
+repo: anythingmcp-status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  # Backend health: database, Redis and process memory. Answers 503 when one is down.
+  - name: Cloud API
+    slug: cloud-api
+    url: https://cloud.anythingmcp.com/health
+    maxResponseTime: 10000
+  # A real MCP handshake (initialize) on the public demo server: proves the gateway answers MCP clients.
+  - name: MCP gateway
+    slug: mcp-gateway
+    url: https://cloud.anythingmcp.com/mcp/demo
+    method: POST
+    headers:
+      - "Content-Type: application/json"
+      - "Accept: application/json, text/event-stream"
+      - "MCP-Protocol-Version: 2025-06-18"
+    body: '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"anythingmcp-status","version":"1"}}}'
+    maxResponseTime: 10000
+  - name: Cloud web app
+    slug: cloud-web-app
+    url: https://cloud.anythingmcp.com/login
+    maxResponseTime: 10000
+  - name: Website
+    slug: website
+    url: https://anythingmcp.com
+    maxResponseTime: 10000
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  cname: status.anythingmcp.com
+  logoUrl: https://anythingmcp.com/logo.svg
+  favicon: https://anythingmcp.com/logo.svg
+  name: AnythingMCP Status
+  introTitle: "**AnythingMCP** system status"
+  introMessage: Live availability of AnythingMCP Cloud, the MCP gateway and anythingmcp.com, checked every five minutes from outside our own infrastructure. Self-hosted instances are not covered.
+  theme: light
   navbar:
     - title: Status
       href: /
+    - title: AnythingMCP
+      href: https://anythingmcp.com
+    - title: Developers
+      href: https://anythingmcp.com/developers
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
-
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
